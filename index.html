@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EventEase - Smart Event Management System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+
+<body class="bg-blue-50 min-h-screen font-sans">
+
+  <header class="bg-white shadow mb-6">
+    <nav class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between p-4">
+      <div class="flex items-center gap-3">
+        <img src="images/EventEase.jpg" alt="EventEase Logo" class="w-20 h-20 rounded-full" />
+        <span class="text-xl font-bold text-blue-700">EventEase</span>
+      </div>
+      <ul class="flex gap-4 mt-2 md:mt-0">
+        <li><a href="#about" class="hover:text-blue-600">About</a></li>
+        <li><a href="#events" class="hover:text-blue-600">Events</a></li>
+        <li><a href="#venues" class="hover:text-blue-600">Venues</a></li>
+        <li><a href="#feedback" class="hover:text-blue-600">Feedback</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="max-w-4xl mx-auto p-4">
+    <!-- About Section -->
+    <section id="about" class="mb-8">
+      <article class="flex flex-col md:flex-row items-center gap-6 bg-white p-4 rounded">
+        <div class="flex-1">
+          <h2 class="text-lg font-semibold text-blue-700 mb-2">About EventEase</h2>
+          <p class="mb-2 text-blue-900">Your Gateway to Effortless Event Experiences</p>
+          <p>
+            <b>EventEase</b> is a simple event management platform for organizing and attending events like conferences, workshops, and concerts. It helps organizers manage registrations and venues, and lets attendees easily find and join events.
+          </p>
+        </div>
+        <img src="images/EventManagement.jpeg" alt="Event" class="w-40 rounded" />
+      </article>
+    </section>
+
+    <!-- Events Section -->
+    <section id="events" class="mb-8">
+      <article class="bg-white p-4 rounded">
+        <h2 class="text-lg font-semibold text-blue-700 mb-2">Upcoming Events</h2>
+        <ul id="eventList" class="list-disc list-inside">
+          <!-- Events will be shown here -->
+        </ul>
+      </article>
+    </section>
+
+    <!-- Venues Section -->
+    <section id="venues" class="mb-8">
+      <article class="bg-white p-4 rounded shadow">
+        <h2 class="text-lg font-semibold text-blue-700 mb-2">Event Venues Map</h2>
+        <div id="map" class="w-full h-64 rounded mb-2"></div>
+        <div id="geo" class="text-sm text-gray-700">
+          Your Location: <span id="lat">-</span>, <span id="long">-</span>
+        </div>
+      </article>
+    </section>
+
+    <!-- Feedback Section -->
+    <section id="feedback" class="mb-8">
+      <article class="bg-white p-4 rounded shadow max-w-md">
+        <h2 class="text-lg font-semibold text-blue-700 mb-2">Feedback</h2>
+        <form id="feedbackForm" class="flex flex-col gap-2">
+          <input type="text" id="name" placeholder="Your Name" required class="border p-2 rounded" />
+          <textarea id="comment" placeholder="Your Comment" required class="border p-2 rounded"></textarea>
+          <button type="submit" class="bg-blue-100 text-blue-700 px-3 py-1 rounded">Submit</button>
+        </form>
+        <div class="mt-4">
+          <h3 class="font-semibold mb-1">Previous Feedback</h3>
+          <ul id="feedbackList" class="text-sm space-y-1"></ul>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="bg-white text-center p-3 mt-8 shadow">
+    <p class="text-gray-700 text-sm">
+      Developed by Sudeepa Santhanam | Date: 25-06-2025 | &copy; 2025 EventEase
+    </p>
+  </footer>
+
+  <script>
+    // List of events with their details and coordinates
+    const events = [
+      {
+        name: "Tech Conference 2025",
+        location: "Chennai, India",
+        date: "2025-07-10",
+        coords: [13.0843, 80.2705]
+      },
+      {
+        name: "Music Fest",
+        location: "Mumbai, India",
+        date: "2025-08-05",
+        coords: [19.0760, 72.8777]
+      },
+      {
+        name: "TEDx Youth",
+        location: "Delhi, India",
+        date: "2025-09-15",
+        coords: [28.6139, 77.2090]
+      }
+    ];
+
+    // Show the list of events in the Events section
+    function showEvents() {
+      const eventList = document.getElementById("eventList");
+      eventList.innerHTML = "";
+      for (let i = 0; i < events.length; i++) {
+        const ev = events[i];
+        const li = document.createElement("li");
+        li.textContent = ev.name + " - " + ev.location + " (" + ev.date + ")";
+        eventList.appendChild(li);
+      }
+    }
+
+    // Handle feedback form submission and save to LocalStorage
+    document.getElementById("feedbackForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      const name = document.getElementById("name").value.trim();
+      const comment = document.getElementById("comment").value.trim();
+
+      if (name && comment) {
+        // Get existing feedbacks or start with an empty array
+        let feedbacks = [];
+        if (localStorage.getItem("feedbacks")) {
+          feedbacks = JSON.parse(localStorage.getItem("feedbacks"));
+        }
+        // Add new feedback
+        feedbacks.push({ name: name, comment: comment });
+        // Save back to LocalStorage
+        localStorage.setItem("feedbacks", JSON.stringify(feedbacks));
+        showFeedbacks();
+        this.reset();
+      }
+    });
+
+    // all feedbacks from LocalStorage
+    function showFeedbacks() {
+      let feedbacks = [];
+      if (localStorage.getItem("feedbacks")) {
+        feedbacks = JSON.parse(localStorage.getItem("feedbacks"));
+      }
+      const list = document.getElementById("feedbackList");
+      list.innerHTML = "";
+      // latest feedbacks first
+      for (let i = feedbacks.length - 1; i >= 0; i--) {
+        const f = feedbacks[i];
+        const li = document.createElement("li");
+        li.textContent = f.name + ": " + f.comment;
+        list.appendChild(li);
+      }
+    }
+
+    function showMap() {
+      const map = L.map('map').setView([22.59, 78.96], 4.5);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+        // Marker for each event
+      for (let i = 0; i < events.length; i++) {
+        const ev = events[i];
+        if (ev.coords) {
+          L.marker(ev.coords)
+            .addTo(map)
+            .bindPopup(ev.name + "<br>" + ev.location + "<br>" + ev.date);
+        }
+      }
+
+      // user's current location 
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function (position) {
+            const userCoords = [position.coords.latitude, position.coords.longitude];
+            L.marker(userCoords)
+              .addTo(map)
+              .bindPopup("You are here").openPopup();
+            document.getElementById("lat").textContent = position.coords.latitude.toFixed(4);
+            document.getElementById("long").textContent = position.coords.longitude.toFixed(4);
+          },
+          function () {
+            document.getElementById("lat").textContent = "Unavailable";
+            document.getElementById("long").textContent = "Unavailable";
+          }
+        );
+      }
+    }
+
+    // Run these functions when the page loads
+    window.onload = function () {
+      showEvents();
+      showFeedbacks();
+      showMap();
+    };
+  </script>
+</body>
+
+</html>
