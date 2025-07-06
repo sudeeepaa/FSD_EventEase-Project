@@ -2,204 +2,254 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EventEase - Smart Event Management System</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* Custom animation for fade-in */
+    .fade-in {
+      animation: fadeIn 1s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Hero background overlay */
+    .hero-bg {
+      background: linear-gradient(rgba(30, 64, 175, 0.7), rgba(59, 130, 246, 0.6)), url('images/event-hero.jpg') center/cover no-repeat;
+    }
+  </style>
 </head>
 
-<body class="bg-blue-50 min-h-screen font-sans">
+<body class="bg-gray-50 font-sans">
 
-  <header class="bg-white shadow mb-6">
-    <nav class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between p-4">
-      <div class="flex items-center gap-3">
-        <img src="images/EventEase.jpg" alt="EventEase Logo" class="w-20 h-20 rounded-full" />
-        <span class="text-xl font-bold text-blue-700">EventEase</span>
+  <header>
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow sticky top-0 z-50">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="flex justify-between items-center py-4">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-calendar-days text-blue-600 text-2xl"></i>
+            <span class="font-bold text-xl text-blue-700">EventEase</span>
+          </div>
+          <div class="hidden md:flex gap-8">
+            <a href="about.html" class="flex items-center gap-1 text-blue-700 hover:text-blue-900"><i class="fa-solid fa-info-circle"></i>About</a>
+            <a href="features.html" class="flex items-center gap-1 text-blue-700 hover:text-blue-900"><i class="fa-solid fa-star"></i>Features</a>
+            <a href="gallery.html" class="flex items-center gap-1 text-blue-700 hover:text-blue-900"><i class="fa-solid fa-image"></i>Gallery</a>
+            <a href="contact.html" class="flex items-center gap-1 text-blue-700 hover:text-blue-900"><i class="fa-solid fa-envelope"></i>Contact</a>
+          </div>
+          <!-- Hamburger -->
+          <button id="menu-btn" class="md:hidden text-blue-700 text-2xl"><i class="fa-solid fa-bars"></i></button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden flex-col gap-4 pb-4">
+          <a href="about.html" class="flex items-center gap-1 text-blue-700 hover:text-blue-900"><i class="fa-solid fa-info-circle"></i>About</a>
+          <a href="features.html" class="flex items-center gap-1 text-blue-700 hover:text-blue-900"><i class="fa-solid fa-star"></i>Features</a>
+          <a href="gallery.html" class="flex items-center gap-1 text-blue-700 hover:text-blue-900"><i class="fa-solid fa-image"></i>Gallery</a>
+          <a href="contact.html" class="flex items-center gap-1 text-blue-700 hover:text-blue-900"><i class="fa-solid fa-envelope"></i>Contact</a>
+        </div>
       </div>
-      <ul class="flex gap-4 mt-2 md:mt-0">
-        <li><a href="#about" class="hover:text-blue-600">About</a></li>
-        <li><a href="#events" class="hover:text-blue-600">Events</a></li>
-        <li><a href="#venues" class="hover:text-blue-600">Venues</a></li>
-        <li><a href="#feedback" class="hover:text-blue-600">Feedback</a></li>
-      </ul>
     </nav>
   </header>
 
-  <main class="max-w-4xl mx-auto p-4">
+  <main>
+    <!-- Hero Section -->
+    <section class="relative h-[60vh] flex items-center justify-center bg-cover bg-center hero-bg">
+      <div class="bg-black bg-opacity-50 absolute inset-0"></div>
+      <div class="relative z-10 text-center text-white">
+        <h1 class="text-4xl md:text-6xl font-extrabold mb-4 fade-in">Welcome to EventEase</h1>
+        <p class="text-lg md:text-2xl mb-6 fade-in">Smart event management for seamless experiences.</p>
+        <a href="#events" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-semibold shadow-lg transition fade-in"><i class="fa-solid fa-calendar-plus mr-2"></i>Explore Events</a>
+      </div>
+    </section>
+
     <!-- About Section -->
-    <section id="about" class="mb-8">
-      <article class="flex flex-col md:flex-row items-center gap-6 bg-white p-4 rounded">
-        <div class="flex-1">
-          <h2 class="text-lg font-semibold text-blue-700 mb-2">About EventEase</h2>
-          <p class="mb-2 text-blue-900">Your Gateway to Effortless Event Experiences</p>
-          <p>
-            <b>EventEase</b> is a simple event management platform for organizing and attending events like conferences, workshops, and concerts. It helps organizers manage registrations and venues, and lets attendees easily find and join events.
-          </p>
-        </div>
-        <img src="images/EventManagement.jpeg" alt="Event" class="w-40 rounded" />
-      </article>
-    </section>
-
-    <!-- Events Section -->
-    <section id="events" class="mb-8">
-      <article class="bg-white p-4 rounded">
-        <h2 class="text-lg font-semibold text-blue-700 mb-2">Upcoming Events</h2>
-        <ul id="eventList" class="list-disc list-inside">
-          <!-- Events will be shown here -->
+    <section class="max-w-5xl mx-auto my-12 px-4 flex flex-col md:flex-row gap-8 items-center">
+      <article class="flex-1">
+        <h2 class="text-2xl font-bold mb-2 text-blue-700">Why Choose EventEase?</h2>
+        <p class="mb-2">EventEase simplifies event planning, registration, and management for organizers and attendees.</p>
+        <ul class="list-disc ml-5 text-blue-700">
+          <li>Easy event creation and promotion</li>
+          <li>Real-time attendee management</li>
+          <li>Seamless feedback and analytics</li>
         </ul>
+        <a href="about.html" class="inline-block mt-4 text-blue-600 hover:underline font-semibold">Learn More &rarr;</a>
+      </article>
+      <img src="images\EventPlan3.jpeg" alt="Event" class="w-64 rounded-lg shadow-lg" />
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="max-w-5xl mx-auto my-12 px-4 flex flex-col md:flex-row gap-8 items-center">
+      <img src="images\PlanEvent1.jpeg" alt="How it works" class="w-64 rounded-lg shadow-lg" />
+      <article class="flex-1">
+        <h2 class="text-2xl font-bold mb-2 text-blue-700">How It Works</h2>
+        <p>Create, manage, and attend events with just a few clicks. Our intuitive dashboard and real-time updates make event management a breeze.</p>
+        <a href="features.html" class="inline-block mt-4 text-blue-600 hover:underline font-semibold">Learn More &rarr;</a>
       </article>
     </section>
 
-    <!-- Venues Section -->
-    <section id="venues" class="mb-8">
-      <article class="bg-white p-4 rounded shadow">
-        <h2 class="text-lg font-semibold text-blue-700 mb-2">Event Venues Map</h2>
-        <div id="map" class="w-full h-64 rounded mb-2"></div>
-        <div id="geo" class="text-sm text-gray-700">
-          Your Location: <span id="lat">-</span>, <span id="long">-</span>
+    <!-- Video with Subtitles -->
+    <section class="max-w-3xl mx-auto my-12 px-4">
+      <h2 class="text-2xl font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-film text-blue-600"></i> Watch Our Promo Video!</h2>
+      <video controls width="100%">
+        <source src="media/promo.mp4" type="video/mp4">
+        <track src="media/promo.vtt" kind="subtitles" srclang="en" label="English" default>
+        Your browser does not support the video tag.
+      </video>
+    </section>
+
+    <!-- Audio Element -->
+    <section class="max-w-3xl mx-auto my-12 px-4">
+      <h2 class="text-2xl font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-music text-blue-600"></i> Listen to EventEase Vibezz</h2>
+      <audio controls class="w-full">
+        <source src="media/relaxing.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+      </audio>
+    </section>
+
+    <!-- Events Section (Fetch API Example) -->
+    <section id="events" class="max-w-6xl mx-auto my-12 px-4">
+  <h2 class="text-2xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-calendar-check text-blue-600"></i> Upcoming Events</h2>
+  <div id="events-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    <div class="bg-white rounded-lg shadow-lg p-4 flex flex-col">
+      <img src="images/event1.jpeg" alt="Tech Innovators Summit" class="rounded mb-2 w-full h-40 object-cover" />
+      <h3 class="font-bold text-blue-700 mb-2">Tech Innovators Summit 2025</h3>
+      <p class="text-gray-700 mb-2">A gathering of the brightest minds in technology, featuring keynote speakers and hands-on workshops.</p>
+      <span class="text-sm text-gray-500">March 2025 | Bengaluru</span>
+    </div>
+    <div class="bg-white rounded-lg shadow-lg p-4 flex flex-col">
+      <img src="images/event2.jpeg" alt="Startup Expo" class="rounded mb-2 w-full h-40 object-cover" />
+      <h3 class="font-bold text-blue-700 mb-2">Startup Expo</h3>
+      <p class="text-gray-700 mb-2">Showcasing the most promising startups and connecting them with investors and mentors.</p>
+      <span class="text-sm text-gray-500">April 2025 | Hyderabad</span>
+    </div>
+    <div class="bg-white rounded-lg shadow-lg p-4 flex flex-col">
+      <img src="images/event3.jpeg" alt="Annual Charity Gala" class="rounded mb-2 w-full h-40 object-cover" />
+      <h3 class="font-bold text-blue-700 mb-2">Annual Charity Gala</h3>
+      <p class="text-gray-700 mb-2">A night of giving back, with live performances and fundraising for local causes.</p>
+      <span class="text-sm text-gray-500">May 2025 | Chennai</span>
+    </div>
+    <!-- Add more event cards as needed -->
+  </div>
+  <div class="mt-4 text-right">
+    <a href="events.html" class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">See More Events</a>
+  </div>
+</section>
+
+    <!-- Gallery Section with SVG -->
+    <section id="gallery" class="max-w-6xl mx-auto my-12 px-4">
+      <h2 class="text-2xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-image text-blue-600"></i> Gallery</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-lg shadow-lg p-4 flex flex-col items-center">
+          <img src="images\Event2.jpeg" alt="Gallery 1" class="rounded mb-2 w-full h-40 object-cover" />
+          <!-- Custom SVG Example: Event Ticket -->
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" class="mb-2">
+            <rect x="3" y="7" width="18" height="10" rx="2" stroke="#2563eb" stroke-width="2" />
+            <circle cx="8" cy="12" r="1" fill="#2563eb" />
+            <circle cx="16" cy="12" r="1" fill="#2563eb" />
+          </svg>
+          <span class="text-blue-700 font-semibold">Annual Tech Fest</span>
         </div>
-      </article>
+        <div class="bg-white rounded-lg shadow-lg p-4 flex flex-col items-center">
+    <img src="images/gallery2.jpeg" alt="Networking Session" class="rounded mb-2 w-full h-40 object-cover" />
+    <span class="text-blue-700 font-semibold">Networking Session</span>
+  </div>
+  <div class="bg-white rounded-lg shadow-lg p-4 flex flex-col items-center">
+    <img src="images/gallery3.jpeg" alt="Award Ceremony" class="rounded mb-2 w-full h-40 object-cover" />
+    <span class="text-blue-700 font-semibold">Award Ceremony</span>
+  </div>
+      </div>
+      <div class="mt-4 text-right">
+        <a href="gallery.html" class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">View All</a>
+      </div>
     </section>
 
-    <!-- Feedback Section -->
-    <section id="feedback" class="mb-8">
-      <article class="bg-white p-4 rounded shadow max-w-md">
-        <h2 class="text-lg font-semibold text-blue-700 mb-2">Feedback</h2>
-        <form id="feedbackForm" class="flex flex-col gap-2">
-          <input type="text" id="name" placeholder="Your Name" required class="border p-2 rounded" />
-          <textarea id="comment" placeholder="Your Comment" required class="border p-2 rounded"></textarea>
-          <button type="submit" class="bg-blue-100 text-blue-700 px-3 py-1 rounded">Submit</button>
-        </form>
-        <div class="mt-4">
-          <h3 class="font-semibold mb-1">Previous Feedback</h3>
-          <ul id="feedbackList" class="text-sm space-y-1"></ul>
-        </div>
-      </article>
-    </section>
-  </main>
 
-  <footer class="bg-white text-center p-3 mt-8 shadow">
-    <p class="text-gray-700 text-sm">
-      Developed by Sudeepa Santhanam | Date: 25-06-2025 | &copy; 2025 EventEase
-    </p>
+    <!-- Feedback Section (Web Storage) -->
+    <section id="feedback" class="max-w-3xl mx-auto my-12 px-4">
+      <h2 class="text-2xl font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-envelope text-blue-600"></i> Feedback</h2>
+      <form id="feedbackForm" class="bg-white rounded-lg shadow-lg p-6 flex flex-col gap-4">
+        <input type="text" id="name" placeholder="Your Name" class="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-200 transition" required />
+        <textarea id="comment" placeholder="Your Comment" class="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-200 transition" required></textarea>
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition font-semibold">Send</button>
+      </form>
+      <div class="mt-4">
+        <h3 class="font-semibold mb-1 text-blue-700"><i class="fa-solid fa-clock-rotate-left mr-1"></i>Previous Feedback</h3>
+        <ul id="feedbackList" class="text-sm space-y-1"></ul>
+      </div>
+    </section>
+
+    <!-- Additional Links Section -->
+    <section class="max-w-6xl mx-auto my-12 px-4 text-center">
+      <h2 class="text-2xl font-bold mb-6 text-blue-700">Explore More</h2>
+      <a href="events.html" class="inline-block mt-4 text-blue-600 hover:underline font-semibold">See All Events &rarr;</a>
+      <a href="gallery.html" class="inline-block mt-4 text-blue-600 hover:underline font-semibold">View Gallery &rarr;</a>
+      <a href="testimonials.html" class="inline-block mt-4 text-blue-600 hover:underline font-semibold">Read Testimonials &rarr;</a>
+      <a href="map.html" class="inline-block mt-4 text-blue-600 hover:underline font-semibold">View Event Map &rarr;</a>
+      <a href="contact.html" class="inline-block mt-4 text-blue-600 hover:underline font-semibold">Contact Us &rarr;</a>
+    </section>
+
+
+  <!-- Footer with SVG -->
+  <footer class="bg-blue-700 text-white text-center py-6 mt-12">
+    <div class="flex flex-col items-center gap-2">
+      <span>© 2025 EventEase | Sudeepa Santhanam | 05-07-2025</span>
+      <!-- SVG Globe Example -->
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" />
+        <ellipse cx="12" cy="12" rx="6" ry="10" stroke="white" stroke-width="2" />
+        <ellipse cx="12" cy="12" rx="10" ry="6" stroke="white" stroke-width="2" />
+      </svg>
+    </div>
   </footer>
 
+  <!-- Hamburger Menu Script -->
   <script>
-    // List of events with their details and coordinates
-    const events = [
-      {
-        name: "Tech Conference 2025",
-        location: "Chennai, India",
-        date: "2025-07-10",
-        coords: [13.0843, 80.2705]
-      },
-      {
-        name: "Music Fest",
-        location: "Mumbai, India",
-        date: "2025-08-05",
-        coords: [19.0760, 72.8777]
-      },
-      {
-        name: "TEDx Youth",
-        location: "Delhi, India",
-        date: "2025-09-15",
-        coords: [28.6139, 77.2090]
-      }
-    ];
-
-    // Show the list of events in the Events section
-    function showEvents() {
-      const eventList = document.getElementById("eventList");
-      eventList.innerHTML = "";
-      for (let i = 0; i < events.length; i++) {
-        const ev = events[i];
-        const li = document.createElement("li");
-        li.textContent = ev.name + " - " + ev.location + " (" + ev.date + ")";
-        eventList.appendChild(li);
-      }
-    }
-
-    // Handle feedback form submission and save to LocalStorage
-    document.getElementById("feedbackForm").addEventListener("submit", function (event) {
-      event.preventDefault();
-      const name = document.getElementById("name").value.trim();
-      const comment = document.getElementById("comment").value.trim();
-
-      if (name && comment) {
-        // Get existing feedbacks or start with an empty array
-        let feedbacks = [];
-        if (localStorage.getItem("feedbacks")) {
-          feedbacks = JSON.parse(localStorage.getItem("feedbacks"));
-        }
-        // Add new feedback
-        feedbacks.push({ name: name, comment: comment });
-        // Save back to LocalStorage
-        localStorage.setItem("feedbacks", JSON.stringify(feedbacks));
-        showFeedbacks();
-        this.reset();
-      }
+    // Hamburger Menu
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
     });
 
-    // all feedbacks from LocalStorage
-    function showFeedbacks() {
-      let feedbacks = [];
-      if (localStorage.getItem("feedbacks")) {
-        feedbacks = JSON.parse(localStorage.getItem("feedbacks"));
-      }
-      const list = document.getElementById("feedbackList");
-      list.innerHTML = "";
-      // latest feedbacks first
-      for (let i = feedbacks.length - 1; i >= 0; i--) {
-        const f = feedbacks[i];
-        const li = document.createElement("li");
-        li.textContent = f.name + ": " + f.comment;
-        list.appendChild(li);
-      }
+     
+
+    // Feedback Form with LocalStorage
+    const feedbackForm = document.getElementById('feedbackForm');
+    const feedbackList = document.getElementById('feedbackList');
+    function loadFeedback() {
+      feedbackList.innerHTML = '';
+      const feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '[]');
+      feedbacks.forEach(fb => {
+        const li = document.createElement('li');
+        li.textContent = `${fb.name}: ${fb.comment}`;
+        feedbackList.appendChild(li);
+      });
     }
-
-    function showMap() {
-      const map = L.map('map').setView([22.59, 78.96], 4.5);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-      }).addTo(map);
-
-        // Marker for each event
-      for (let i = 0; i < events.length; i++) {
-        const ev = events[i];
-        if (ev.coords) {
-          L.marker(ev.coords)
-            .addTo(map)
-            .bindPopup(ev.name + "<br>" + ev.location + "<br>" + ev.date);
-        }
+    feedbackForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const comment = document.getElementById('comment').value.trim();
+      if (name && comment) {
+        const feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '[]');
+        feedbacks.unshift({ name, comment });
+        localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+        loadFeedback();
+        feedbackForm.reset();
       }
-
-      // user's current location 
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          function (position) {
-            const userCoords = [position.coords.latitude, position.coords.longitude];
-            L.marker(userCoords)
-              .addTo(map)
-              .bindPopup("You are here").openPopup();
-            document.getElementById("lat").textContent = position.coords.latitude.toFixed(4);
-            document.getElementById("long").textContent = position.coords.longitude.toFixed(4);
-          },
-          function () {
-            document.getElementById("lat").textContent = "Unavailable";
-            document.getElementById("long").textContent = "Unavailable";
-          }
-        );
-      }
-    }
-
-    // Run these functions when the page loads
-    window.onload = function () {
-      showEvents();
-      showFeedbacks();
-      showMap();
-    };
+    });
+    loadFeedback();
   </script>
 </body>
 

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EventEase | Event Locations Map</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Leaflet CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <style>
+    #map { height: 500px; }
+  </style>
+</head>
+<body class="bg-gray-50 font-sans">
+  <nav class="bg-white shadow sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 flex justify-between items-center py-4">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-calendar-days text-blue-600 text-2xl"></i>
+        <span class="font-bold text-xl text-blue-700">EventEase</span>
+      </div>
+      <div class="hidden md:flex gap-8">
+        <a href="index.html" class="text-blue-700 hover:text-blue-900">Home</a>
+        <a href="events.html" class="text-blue-700 hover:text-blue-900">Events</a>
+        <a href="gallery.html" class="text-blue-700 hover:text-blue-900">Gallery</a>
+        <a href="contact.html" class="text-blue-700 hover:text-blue-900">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-6xl mx-auto my-12 px-4">
+    <h1 class="text-3xl font-bold mb-4 text-blue-700">All Event Locations</h1>
+    <div id="map" class="rounded-lg shadow-lg mb-6"></div>
+    <div class="bg-white rounded-lg shadow p-4">
+      <h2 class="text-xl font-semibold mb-2">Events on Map</h2>
+      <ul class="list-disc ml-6 text-blue-700">
+        <li><b>Tech Innovators Summit 2025</b> – Bengaluru</li>
+        <li><b>Startup Expo</b> – Hyderabad</li>
+        <li><b>Annual Charity Gala</b> – Chennai</li>
+        <li><b>Women in Leadership Forum</b> – Mumbai</li>
+        <li><b>Green Future Conference</b> – Pune</li>
+        <li><b>Digital Marketing Bootcamp</b> – Delhi</li>
+        <li><b>Food Carnival</b> – Kolkata</li>
+        <li><b>Art & Culture Fest</b> – Jaipur</li>
+        <li><b>Healthcare Innovation Summit</b> – Ahmedabad</li>
+        <li><b>Winter Music Festival</b> – Goa</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer class="bg-blue-700 text-white text-center py-6 mt-12">
+    <span>© 2025 EventEase | Sudeepa Santhanam</span>
+  </footer>
+
+  <script>
+    // Initialize the map
+    var map = L.map('map').setView([20.6, 78.9], 5.2); // Centered over India
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // All 10 event locations
+    var events = [
+      { name: "Tech Innovators Summit 2025", city: "Bengaluru", coords: [12.9716, 77.5946] },
+      { name: "Startup Expo", city: "Hyderabad", coords: [17.3850, 78.4867] },
+      { name: "Annual Charity Gala", city: "Chennai", coords: [13.0827, 80.2707] },
+      { name: "Women in Leadership Forum", city: "Mumbai", coords: [19.0760, 72.8777] },
+      { name: "Green Future Conference", city: "Pune", coords: [18.5204, 73.8567] },
+      { name: "Digital Marketing Bootcamp", city: "Delhi", coords: [28.6139, 77.2090] },
+      { name: "Food Carnival", city: "Kolkata", coords: [22.5726, 88.3639] },
+      { name: "Art & Culture Fest", city: "Jaipur", coords: [26.9124, 75.7873] },
+      { name: "Healthcare Innovation Summit", city: "Ahmedabad", coords: [23.0225, 72.5714] },
+      { name: "Winter Music Festival", city: "Goa", coords: [15.2993, 74.1240] }
+    ];
+
+    // Add event markers
+    events.forEach(ev => {
+      L.marker(ev.coords)
+        .addTo(map)
+        .bindPopup(`<b>${ev.name}</b><br>${ev.city}`);
+    });
+
+    // Ask for user's location and show it on the map
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(pos) {
+        var userCoords = [pos.coords.latitude, pos.coords.longitude];
+        L.marker(userCoords, {
+          icon: L.icon({
+            iconUrl: "https://cdn-icons-png.flaticon.com/512/64/64113.png",
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
+          })
+        })
+        .addTo(map)
+        .bindPopup("<b>You are here!</b>")
+        .openPopup();
+        map.setView(userCoords, 8);
+      }, function() {
+        // Permission denied or error
+        // Optionally show a message or fallback
+      });
+    }
+  </script>
+</body>
+</html>
