@@ -1,0 +1,17 @@
+[
+  {
+    "title": "Tech Summit 2025",
+    "description": "Explore AI, Robotics, and Blockchain trends.",
+    "image": "images/event1.jpeg"
+  },
+  {
+    "title": "StartUp Expo",
+    "description": "Pitch your idea to global investors.",
+    "image": "images/event2.jpeg"
+  },
+  {
+    "title": "DesignCon",
+    "description": "Workshops and talks on UX/UI and product design.",
+    "image": "images/event3.jpeg"
+  }
+]
